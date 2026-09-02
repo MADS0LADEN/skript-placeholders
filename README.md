@@ -10,6 +10,8 @@ This addon allows you to use and register placeholders with PlaceholderAPI and/o
 For this addon to work, you must have PlaceholderAPI or MVdWPlaceholderAPI installed.
 Please note that you must have an MVdW plugin for MVdWPlaceholderAPI to function.
 
+This addon supports Paper, Folia, and CanvasMC. On Folia or CanvasMC, you also need a Folia-compatible Skript build (the official Skript plugin does not support Folia).
+
 This addon is a fork of [Ersatz (by Pikachu)](https://github.com/Pikachu920/Ersatz) which has been updated to work with PlaceholderAPI's new PlaceholderExpansion system and adds new features.
 
 # Links

@@ -8,8 +8,8 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * A placeholder listener for placeholders created using {@link PlaceholderPlugin#PLACEHOLDER_API}.
@@ -19,7 +19,7 @@ public class PlaceholderAPIListener extends PlaceholderExpansion implements Rela
 	private final Plugin plugin;
 	private final String prefix;
 
-	private final Set<PlaceholderEvaluator> evaluators = new HashSet<>();
+	private final Set<PlaceholderEvaluator> evaluators = new CopyOnWriteArraySet<>();
 
 	public PlaceholderAPIListener(Plugin plugin, String prefix) {
 		this.plugin = plugin;

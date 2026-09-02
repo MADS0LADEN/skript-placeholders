@@ -6,3 +6,6 @@ authors: [APickledWalrus, Pikachu920]
 description: Allows using and registering placeholders with PlaceholderAPI and MVdWPlaceholderAPI in Skript.
 website: https://github.com/APickledWalrus/skript-placeholders
 softdepend: [Skript, PlaceholderAPI, MVdWPlaceholderAPI]
+# Required for Folia and CanvasMC (a Folia fork). Do not use canvas-supported:
+# that tag is only for plugins that depend on Canvas-specific API.
+folia-supported: true

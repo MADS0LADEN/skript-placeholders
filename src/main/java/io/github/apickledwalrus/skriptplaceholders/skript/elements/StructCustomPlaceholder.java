@@ -19,7 +19,7 @@ import io.github.apickledwalrus.skriptplaceholders.placeholder.PlaceholderRegist
 import io.github.apickledwalrus.skriptplaceholders.skript.PlaceholderEvent;
 import io.github.apickledwalrus.skriptplaceholders.placeholder.PlaceholderPlugin;
 import io.github.apickledwalrus.skriptplaceholders.skript.RelationalPlaceholderEvent;
-import org.bukkit.Bukkit;
+import io.github.apickledwalrus.skriptplaceholders.util.TaskScheduler;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -48,7 +48,7 @@ import org.skriptlang.skript.lang.structure.Structure;
 		"\t# Placeholder is \"{skriptplaceholders_author}\"",
 		"\tset the result to \"APickledWalrus\""
 })
-@Since("1.0.0, 1.3.0 (MVdWPlaceholderAPI support), 1.7.0 (relational placeholder support)")
+@Since("1.0.0, 1.3.0 (MVdWPlaceholderAPI support), 1.7.0 (relational placeholder support), 1.8.0 (Folia/CanvasMC support)")
 public class StructCustomPlaceholder extends Structure implements PlaceholderEvaluator {
 
 	static {
@@ -111,28 +111,20 @@ public class StructCustomPlaceholder extends Structure implements PlaceholderEva
 		trigger.setDebugLabel(script + ": line " + lineNumber);
 
 		// see https://github.com/APickledWalrus/skript-placeholders/issues/40
-		// ensure registration is on the main thread
-		if (Bukkit.isPrimaryThread()) {
-			registry.registerPlaceholder(plugin, placeholder, this);
-		} else {
-			Bukkit.getScheduler().runTask(SkriptPlaceholders.getInstance(),
-					() -> registry.registerPlaceholder(plugin, placeholder, this)
-			);
-		}
+		// ensure registration is on the main/global thread (Bukkit scheduler is unsupported on Folia/CanvasMC)
+		TaskScheduler.runSync(SkriptPlaceholders.getInstance(),
+				() -> registry.registerPlaceholder(plugin, placeholder, this)
+		);
 
 		return true;
 	}
 
 	@Override
 	public void unload() {
-		// to be safe, ensure unregistering is done on the main thread too
-		if (Bukkit.isPrimaryThread()) {
-			registry.unregisterPlaceholder(plugin, placeholder, this);
-		} else {
-			Bukkit.getScheduler().runTask(SkriptPlaceholders.getInstance(),
-					() -> registry.unregisterPlaceholder(plugin, placeholder, this)
-			);
-		}
+		// to be safe, ensure unregistering is done on the main/global thread too
+		TaskScheduler.runSync(SkriptPlaceholders.getInstance(),
+				() -> registry.unregisterPlaceholder(plugin, placeholder, this)
+		);
 	}
 
 	@Override
