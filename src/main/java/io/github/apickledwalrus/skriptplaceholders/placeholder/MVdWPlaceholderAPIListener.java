@@ -4,8 +4,8 @@ import be.maximvdw.placeholderapi.PlaceholderAPI;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * A placeholder listener for placeholders created using {@link PlaceholderPlugin#MVDW_PLACEHOLDER_API}.
@@ -15,7 +15,7 @@ public class MVdWPlaceholderAPIListener implements PlaceholderListener {
 	private final Plugin plugin;
 	private final String placeholder;
 
-	private final Set<PlaceholderEvaluator> evaluators = new HashSet<>();
+	private final Set<PlaceholderEvaluator> evaluators = new CopyOnWriteArraySet<>();
 	private boolean isInvalid;
 
 	public MVdWPlaceholderAPIListener(Plugin plugin, String placeholder) {
