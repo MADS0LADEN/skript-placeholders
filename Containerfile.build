@@ -1,0 +1,7 @@
+# Builder-image til skript-placeholders: JDK 21 + git.
+# git er påkrævet, fordi 'nightlyBuild' bruger 'git rev-parse' til versionsnummeret.
+FROM docker.io/library/eclipse-temurin:21-jdk
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git \
+    && rm -rf /var/lib/apt/lists/*

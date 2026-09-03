@@ -20,5 +20,5 @@ jobs:
       uses: actions/upload-artifact@v4
       if: success()
       with:
-        name: skript-placeholders-nightly
-        path: build/libs/skript-placeholders-nightly.jar
+        name: skript-placeholders
+        path: build/libs/skript-placeholders.jar
