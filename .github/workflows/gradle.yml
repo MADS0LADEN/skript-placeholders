@@ -21,4 +21,4 @@ jobs:
       if: success()
       with:
         name: skript-placeholders
-        path: build/libs/skript-placeholders.jar
+        path: build/libs/skript-placeholders-*.jar

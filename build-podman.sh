@@ -14,7 +14,8 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 IMAGE="skript-placeholder-builder:latest"
 GRADLE_HOME_VOLUME="skript-placeholder-gradle-home"
-JAR="build/libs/skript-placeholders.jar"
+VERSION="$(grep '^version=' "$REPO_ROOT/gradle.properties" | cut -d= -f2)"
+JAR="build/libs/skript-placeholders-$VERSION.jar"
 
 SKIP_PUSH=false
 SKIP_RELEASE=false
@@ -53,7 +54,6 @@ fi
 
 if [ "$SKIP_RELEASE" = false ]; then
 	command -v gh >/dev/null || { echo "FEJL: gh er ikke installeret." >&2; exit 1; }
-	VERSION="$(grep '^version=' gradle.properties | cut -d= -f2)"
 	TAG="v$VERSION"
 	if ! gh release view "$TAG" >/dev/null 2>&1; then
 		echo "==> Opretter GitHub release $TAG ..."

@@ -50,5 +50,5 @@ tasks.register('nightlyResources', ProcessResources) {
 tasks.register('nightlyBuild', Jar) {
     dependsOn nightlyResources
     from sourceSets.main.output
-    archiveFileName = 'skript-placeholders.jar'
+    archiveFileName = "skript-placeholders-${project.version}.jar"
 }
