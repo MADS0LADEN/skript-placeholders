@@ -6,13 +6,17 @@ import io.github.apickledwalrus.skriptplaceholders.placeholder.PlaceholderPlugin
 import io.github.apickledwalrus.skriptplaceholders.placeholder.PlaceholderRegistry;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.IOException;
+import org.skriptlang.skript.addon.SkriptAddon;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class SkriptPlaceholders extends JavaPlugin {
 
 	private static SkriptPlaceholders instance;
 	private PlaceholderRegistry registry;
+
+	public static SyntaxRegistry syntaxRegistry;
+	public static EventValueRegistry eventValueRegistry;
 
 	public static SkriptPlaceholders getInstance() {
 		if (instance == null) {
@@ -29,8 +33,8 @@ public class SkriptPlaceholders extends JavaPlugin {
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
-		if (Skript.getVersion().isSmallerThan(new Version(2, 7, 3))) {
-			getLogger().severe("You are running an unsupported version of Skript. Please update to at least Skript 2.7.3. Disabling...");
+		if (Skript.getVersion().isSmallerThan(new Version(2, 15, 0))) {
+			getLogger().severe("You are running an unsupported version of Skript. Please update to at least Skript 2.15.0. Disabling...");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
@@ -44,9 +48,24 @@ public class SkriptPlaceholders extends JavaPlugin {
 		instance = this;
 		registry = new PlaceholderRegistry(this);
 
+		SkriptAddon addon = Skript.instance().registerAddon(this.getClass(), "SkriptPlaceholders");
+		syntaxRegistry = addon.syntaxRegistry();
+		eventValueRegistry = addon.registry(
+				EventValueRegistry.class,
+				() -> EventValueRegistry.empty(Skript.getInstance())
+		);
+
+		loadSyntaxClasses();
+	}
+
+	private void loadSyntaxClasses() {
 		try {
-			Skript.registerAddon(this).loadClasses("io.github.apickledwalrus.skriptplaceholders.skript.elements");
-		} catch (IOException e) {
+			Class.forName("io.github.apickledwalrus.skriptplaceholders.skript.elements.ExprPlaceholder");
+			Class.forName("io.github.apickledwalrus.skriptplaceholders.skript.elements.ExprPlaceholderResult");
+			Class.forName("io.github.apickledwalrus.skriptplaceholders.skript.elements.ExprPlaceholderValue");
+			Class.forName("io.github.apickledwalrus.skriptplaceholders.skript.elements.ExprRelationalPlaceholderPlayers");
+			Class.forName("io.github.apickledwalrus.skriptplaceholders.skript.elements.StructCustomPlaceholder");
+		} catch (ClassNotFoundException e) {
 			getLogger().severe("A severe error occurred while trying to load the addon. Disabling...");
 			getLogger().severe(e.toString());
 			getServer().getPluginManager().disablePlugin(this);

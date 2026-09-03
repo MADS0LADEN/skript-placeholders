@@ -6,16 +6,19 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import io.github.apickledwalrus.skriptplaceholders.SkriptPlaceholders;
 import io.github.apickledwalrus.skriptplaceholders.placeholder.PlaceholderPlugin;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
+import org.skriptlang.skript.util.Priority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +39,16 @@ import java.util.List;
 public class ExprPlaceholderValue extends SimpleExpression<String> {
 
 	static {
-		Skript.registerExpression(ExprPlaceholderValue.class, String.class, ExpressionType.COMBINED,
-				"[the] [value[s] of [the]] [:relational] placeholder[s] [in] %strings% [(for|from|of) %-players/offlineplayers%]",
-				"[:relational] placeholder[s] %strings%'[s] value[s] [(for|from|of) %-players/offlineplayers%]"
+		SyntaxRegistry registry = SkriptPlaceholders.syntaxRegistry;
+		registry.register(
+				SyntaxRegistry.EXPRESSION,
+				SyntaxInfo.Expression.builder(ExprPlaceholderValue.class, String.class)
+						.priority(Priority.after(Priority.base()))
+						.addPatterns(
+								"[the] [value[s] of [the]] [:relational] placeholder[s] [in] %strings% [(for|from|of) %-players/offlineplayers%]",
+								"[:relational] placeholder[s] %strings%'[s] value[s] [(for|from|of) %-players/offlineplayers%]"
+						)
+						.build()
 		);
 	}
 

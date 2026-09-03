@@ -12,7 +12,6 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.Trigger;
 import ch.njol.skript.lang.parser.ParserInstance;
 import ch.njol.skript.lang.util.SimpleEvent;
-import ch.njol.skript.registrations.EventValues;
 import io.github.apickledwalrus.skriptplaceholders.SkriptPlaceholders;
 import io.github.apickledwalrus.skriptplaceholders.placeholder.PlaceholderEvaluator;
 import io.github.apickledwalrus.skriptplaceholders.placeholder.PlaceholderRegistry;
@@ -25,9 +24,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValue;
+import org.skriptlang.skript.bukkit.lang.eventvalue.EventValueRegistry;
 import org.skriptlang.skript.lang.entry.EntryContainer;
 import org.skriptlang.skript.lang.script.Script;
 import org.skriptlang.skript.lang.structure.Structure;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 
 @Name("Custom Placeholder")
 @Description({
@@ -49,14 +52,30 @@ import org.skriptlang.skript.lang.structure.Structure;
 public class StructCustomPlaceholder extends Structure implements PlaceholderEvaluator {
 
 	static {
-		Skript.registerStructure(StructCustomPlaceholder.class,
-				"(placeholder[ ]api|papi) [:relational] placeholder (with|for) [the] prefix %*string%"
+		SyntaxRegistry registry = SkriptPlaceholders.syntaxRegistry;
+		registry.register(
+				SyntaxRegistry.STRUCTURE,
+				SyntaxInfo.Structure.builder(StructCustomPlaceholder.class)
+						.addPatterns(
+								"(placeholder[ ]api|papi) [:relational] placeholder (with|for) [the] prefix %*string%"
+						)
+						.build()
 		);
-		EventValues.registerEventValue(PlaceholderEvent.class, Player.class, event -> {
-			OfflinePlayer player = event.getPlayer();
-			return player != null ? player.getPlayer() : null;
-		});
-		EventValues.registerEventValue(PlaceholderEvent.class, OfflinePlayer.class, PlaceholderEvent::getPlayer);
+
+		EventValueRegistry eventValueRegistry = SkriptPlaceholders.eventValueRegistry;
+		eventValueRegistry.register(
+				EventValue.builder(PlaceholderEvent.class, Player.class)
+						.getter(event -> {
+							OfflinePlayer player = event.getPlayer();
+							return player != null ? player.getPlayer() : null;
+						})
+						.build()
+		);
+		eventValueRegistry.register(
+				EventValue.builder(PlaceholderEvent.class, OfflinePlayer.class)
+						.getter(PlaceholderEvent::getPlayer)
+						.build()
+		);
 	}
 
 	private SectionNode source;

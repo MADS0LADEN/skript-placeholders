@@ -8,16 +8,19 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
+import io.github.apickledwalrus.skriptplaceholders.SkriptPlaceholders;
 import io.github.apickledwalrus.skriptplaceholders.skript.PlaceholderEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
+import org.skriptlang.skript.util.Priority;
 
 @Name("Placeholder Result")
 @Description("The value of a placeholder in a placeholder event. Can be set, reset, or deleted.")
@@ -31,8 +34,13 @@ import org.jetbrains.annotations.Nullable;
 public class ExprPlaceholderResult extends SimpleExpression<String> {
 
 	static {
-		Skript.registerExpression(ExprPlaceholderResult.class, String.class, ExpressionType.SIMPLE,
-				"[the] [placeholder] result"
+		SyntaxRegistry registry = SkriptPlaceholders.syntaxRegistry;
+		registry.register(
+				SyntaxRegistry.EXPRESSION,
+				SyntaxInfo.Expression.builder(ExprPlaceholderResult.class, String.class)
+						.priority(Priority.base())
+						.addPatterns("[the] [placeholder] result")
+						.build()
 		);
 	}
 

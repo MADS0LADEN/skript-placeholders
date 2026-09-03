@@ -6,15 +6,18 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import io.github.apickledwalrus.skriptplaceholders.SkriptPlaceholders;
 import io.github.apickledwalrus.skriptplaceholders.skript.RelationalPlaceholderEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
+import org.skriptlang.skript.util.Priority;
 
 @Name("Relational Placeholder Players")
 @Description("The two players involved in a relational placeholder request.")
@@ -30,9 +33,16 @@ import org.jetbrains.annotations.Nullable;
 public class ExprRelationalPlaceholderPlayers extends SimpleExpression<Player> {
 
 	static {
-		Skript.registerExpression(ExprRelationalPlaceholderPlayers.class, Player.class, ExpressionType.SIMPLE,
-				"[the] first player",
-				"[the] second player"
+		SyntaxRegistry registry = SkriptPlaceholders.syntaxRegistry;
+		registry.register(
+				SyntaxRegistry.EXPRESSION,
+				SyntaxInfo.Expression.builder(ExprRelationalPlaceholderPlayers.class, Player.class)
+						.priority(Priority.base())
+						.addPatterns(
+								"[the] first player",
+								"[the] second player"
+						)
+						.build()
 		);
 	}
 
