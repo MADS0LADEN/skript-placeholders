@@ -24,11 +24,9 @@ import java.util.Locale;
 	"placeholderapi placeholder with the prefix \"skriptplaceholders\":",
 		"\tbroadcast \"Placeholder: %the placeholder%\"",
 		"\tbroadcast \"Prefix: %the placeholder prefix%\"",
-		"\tbroadcast \"Identifier: %the placeholder identifier%\"",
-	"mvdw placeholder named \"skriptplaceholders_test\":",
-		"\tbroadcast \"Placeholder: %the placeholder%\""
+		"\tbroadcast \"Identifier: %the placeholder identifier%\""
 })
-@Since("1.0.0, 1.3.0 (MVdWPlaceholderAPI support)")
+@Since("1.0.0")
 @Events("Placeholder Request")
 public class ExprPlaceholder extends SimpleExpression<String> {
 

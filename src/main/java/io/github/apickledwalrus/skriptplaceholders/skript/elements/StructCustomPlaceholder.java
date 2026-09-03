@@ -43,18 +43,14 @@ import org.skriptlang.skript.lang.structure.Structure;
 			"\t\tif the length of the name of the first player > the length of the name of the second player:",
 				"\t\t\tset the result to the name of the first player",
 			"\t\telse:",
-				"\t\t\tset the result to the name of the second player",
-	"mvdw placeholder named \"skriptplaceholders_author\":",
-		"\t# Placeholder is \"{skriptplaceholders_author}\"",
-		"\tset the result to \"APickledWalrus\""
+				"\t\t\tset the result to the name of the second player"
 })
-@Since("1.0.0, 1.3.0 (MVdWPlaceholderAPI support), 1.7.0 (relational placeholder support), 1.8.0 (Folia/CanvasMC support)")
+@Since("1.0.0, 1.7.0 (relational placeholder support), 1.8.0 (Folia/CanvasMC support)")
 public class StructCustomPlaceholder extends Structure implements PlaceholderEvaluator {
 
 	static {
 		Skript.registerStructure(StructCustomPlaceholder.class,
-				"(placeholder[ ]api|papi) [:relational] placeholder (with|for) [the] prefix %*string%",
-				"(mvdw[ ]placeholder[ ]api|mvdw) placeholder [with [the] name|named] %*string%"
+				"(placeholder[ ]api|papi) [:relational] placeholder (with|for) [the] prefix %*string%"
 		);
 		EventValues.registerEventValue(PlaceholderEvent.class, Player.class, event -> {
 			OfflinePlayer player = event.getPlayer();
@@ -73,7 +69,7 @@ public class StructCustomPlaceholder extends Structure implements PlaceholderEva
 
 	@Override
 	public boolean init(Literal<?> @NotNull [] args, int matchedPattern, @NotNull ParseResult parseResult, @Nullable EntryContainer entryContainer) {
-		plugin = PlaceholderPlugin.values()[matchedPattern <= 1 ? matchedPattern : matchedPattern - 2];
+		plugin = PlaceholderPlugin.PLACEHOLDER_API;
 		if (!plugin.isInstalled()) {
 			Skript.error(plugin.getDisplayName() + " placeholders can not be created because the plugin is not installed.");
 			return false;
@@ -129,14 +125,7 @@ public class StructCustomPlaceholder extends Structure implements PlaceholderEva
 
 	@Override
 	public @NotNull String toString(@Nullable Event event, boolean debug) {
-		switch (plugin) {
-			case PLACEHOLDER_API:
-				return "placeholderapi " + (isRelational ? "relational " : "") + "placeholder with the prefix " + placeholder;
-			case MVDW_PLACEHOLDER_API:
-				return "mvdwplaceholderapi placeholder named " + placeholder;
-			default:
-				throw new IllegalArgumentException("Unable to handle PlaceholderPlugin: " + plugin);
-		}
+		return "placeholderapi " + (isRelational ? "relational " : "") + "placeholder with the prefix " + placeholder;
 	}
 
 	@Override

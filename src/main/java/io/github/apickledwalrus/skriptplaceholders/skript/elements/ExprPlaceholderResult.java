@@ -24,12 +24,9 @@ import org.jetbrains.annotations.Nullable;
 @Examples({
 	"placeholderapi placeholder with the prefix \"skriptplaceholders\":",
 		"\tif the identifier is \"author\": # Placeholder is \"%skriptplaceholders_author%\"",
-			"\t\tset the result to \"APickledWalrus\"",
-	"mvdw placeholder named \"skriptplaceholders_author\":",
-		"\t# Placeholder is \"{skriptplaceholders_author}\"",
-		"\tset the result to \"APickledWalrus\""
+			"\t\tset the result to \"APickledWalrus\""
 })
-@Since("1.0.0, 1.3.0 (MVdWPlaceholderAPI support), 1.6.0 (using any type support)")
+@Since("1.0.0, 1.6.0 (using any type support)")
 @Events("Placeholder Request")
 public class ExprPlaceholderResult extends SimpleExpression<String> {
 
